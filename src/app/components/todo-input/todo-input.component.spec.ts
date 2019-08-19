@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TodoInputComponent } from './todo-input.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 
 describe('TodoInputComponent', () => {
   let component: TodoInputComponent;
@@ -8,6 +10,7 @@ describe('TodoInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ FormsModule, FontAwesomeModule ],
       declarations: [ TodoInputComponent ]
     })
     .compileComponents();

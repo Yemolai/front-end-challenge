@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
+import { Todo } from '@/types/todo';
+import { EventEmitter } from 'events';
 
 @Component({
   selector: 'app-todo-list',
@@ -7,13 +9,17 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TodoListComponent implements OnInit {
 
-  @Input() list: Array<{ done: boolean, text: string }>
+  @Input() list: Todo[]
+  @Output() emitter: EventEmitter = new EventEmitter();
 
   constructor() {
   }
 
   ngOnInit() {
+  }
 
+  create(text: string) {
+    this.emitter.emit('create', new Todo(text))
   }
 
 }

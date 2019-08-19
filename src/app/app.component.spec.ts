@@ -3,10 +3,13 @@ import { AppComponent } from './app.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { TodoInputComponent } from './components/todo-input/todo-input.component';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ FormsModule, FontAwesomeModule ],
       declarations: [
         AppComponent,
         TodoListComponent,
@@ -30,11 +33,12 @@ describe('AppComponent', () => {
   });
 
   it('should render title in a h1 tag', () => {
+    const titleMessage = 'Welcome to front-end-challenge!';
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    app.title = 'Welcome to front-end-challenge!';
+    app.title = titleMessage;
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to front-end-challenge!');
+    expect(compiled.querySelector('h1').textContent).toContain(titleMessage);
   });
 });

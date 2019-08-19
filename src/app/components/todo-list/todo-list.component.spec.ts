@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TodoListComponent } from './todo-list.component';
-import { TodoItemComponent } from './../todo-item/todo-item.component';
-import { TodoInputComponent } from './../todo-input/todo-input.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
+import { AppModule } from '@/app.module';
 
 describe('TodoListComponent', () => {
   let component: TodoListComponent;
@@ -10,7 +11,8 @@ describe('TodoListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TodoListComponent, TodoItemComponent, TodoInputComponent ]
+      imports: [ AppModule, FormsModule, FontAwesomeModule ],
+      declarations: []
     })
     .compileComponents();
   }));
@@ -18,6 +20,7 @@ describe('TodoListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TodoListComponent);
     component = fixture.componentInstance;
+    component.list = []
     fixture.detectChanges();
   });
 
