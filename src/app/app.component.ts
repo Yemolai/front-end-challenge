@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'front-end-challenge';
+  title = 'Front end Challenge';
+  protected list: Array<{ done: boolean, text: string }> = []
 }

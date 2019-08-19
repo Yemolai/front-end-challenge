@@ -1,0 +1,7 @@
+<div class="todo-list">
+  <app-todo-input (create)="newTodo"></app-todo-input>
+  <app-todo-item
+    *ngFor="let item of list"
+    [item]="item"
+  ></app-todo-item>
+</div>
