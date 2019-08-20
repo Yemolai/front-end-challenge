@@ -53,6 +53,32 @@ describe('TodoService', () => {
     expect(service.todos.length).toEqual(0);
   })
 
+  it('should be able to clear done todos from list', () => {
+    const size = 20
+    const service: TodoService = TestBed.get(TodoService);
+    expect(service).toBeTruthy();
+    const todos = new Array(size).fill(0).map((_, idx) => new Todo(`test ${idx + 1}`, false));
+    const pos = Math.floor(Math.random() * size)
+    todos[pos].done = true
+    todos.forEach(todo => service.add(todo))
+    todos.forEach(todo => expect(service.todos).toContain(todo))
+    service.clearDone()
+    expect(service.todos).not.toContain(todos[pos])
+  })
+
+  it('should be able to mark a todo as done', () => {
+    const service: TodoService = TestBed.get(TodoService);
+    expect(service).toBeTruthy();
+    service.add(new Todo(`I'm done!`));
+    const oldTodo = service.find(`I'm done!`);
+    expect(oldTodo).toBeTruthy();
+    const newTodo = <Todo>{ ...oldTodo, done: true };
+    service.update(oldTodo, newTodo);
+    const updatedTodo = service.find(`I'm done!`);
+    expect(updatedTodo).toBeTruthy();
+    expect(updatedTodo.done).toBe(true);
+  })
+
   it('should be able to update an item', () => {
     const service: TodoService = TestBed.get(TodoService);
     expect(service).toBeTruthy();
@@ -106,16 +132,31 @@ describe('TodoService', () => {
     const todo2 = new Todo(`Sorry your princess is in another castle.`);
     service.add(todo2);
     expect(service.todos).toContain(todo2);
-    const serialized = localStorage.getItem(TodoService.STORAGE_KEY)
+    const serialized = localStorage.getItem(TodoService.STORAGE_KEY);
     expect(serialized).toBeTruthy();
-    const savedState: Array<Todo> = (JSON.parse(serialized) as Todo[]).map(({ text, done, createdAt }) => {
-      const todo = new Todo(text, done);
-      todo.createdAt = createdAt;
-      return todo
-    });
+    const savedState = (JSON.parse(serialized) as Todo[])
+      .map(({ text, done, createdAt }) => {
+        const todo = new Todo(text, done);
+        todo.createdAt = createdAt;
+        return todo
+      });
     expect(savedState).toBeTruthy();
     expect(savedState.length).toEqual(service.todos.length);
     expect(savedState.find(item => todo.isEqual(item))).toBeTruthy();
     expect(savedState.find(item => todo2.isEqual(item))).toBeTruthy();
+  });
+
+  it('should return only done/undone', () => {
+    const size = 10;
+    const service: TodoService = TestBed.get(TodoService);
+    expect(service).toBeTruthy();
+    const todos = new Array(size).fill(0).map((_, idx) => new Todo(`test ${idx}`, idx % 2 < 1));
+    todos.forEach(todo => service.add(todo))
+    const done = todos.filter(todo => todo.done === true)
+    const undone = todos.filter(todo => todo.done === false)
+    done.forEach(todo => expect(service.done).toContain(todo))
+    done.forEach(todo => expect(service.undone).not.toContain(todo))
+    undone.forEach(todo => expect(service.undone).toContain(todo))
+    undone.forEach(todo => expect(service.done).not.toContain(todo))
   })
 });

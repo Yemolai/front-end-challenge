@@ -18,13 +18,26 @@ export class TodoService {
     return this.__todos
   }
 
+  get undone() {
+    return this.__todos.filter(todo => todo.done !== true)
+  }
+
+  get done() {
+    return this.__todos.filter(todo => todo.done === true)
+  }
+
   protected save() {
     const serializedState = JSON.stringify(this.__todos)
     localStorage.setItem(TodoService.STORAGE_KEY, serializedState)
   }
 
+  find(text: string) {
+    return this.__todos
+      .find(todo => todo.text.toLocaleLowerCase() === text.toLocaleLowerCase())
+  }
+
   add(newTodo: Todo) {
-    const duplicated = this.__todos.find(todo => todo.text.toLowerCase() === newTodo.text)
+    const duplicated = this.find(newTodo.text)
     if (duplicated) {
       throw new Error('duplicated')
     }
@@ -33,8 +46,10 @@ export class TodoService {
   }
 
   update(oldTodo: Todo, newTodo: Todo) {
-    const listWithoutThisItem = this.__todos.filter(todo => todo.text !== oldTodo.text)
-    const duplicated = listWithoutThisItem.find(todo => todo.text === newTodo.text)
+    const listWithoutThisItem = this.__todos
+      .filter(todo => todo.text.toLocaleLowerCase() !== oldTodo.text.toLocaleLowerCase())
+    const duplicated = listWithoutThisItem
+      .find(todo => todo.text.toLocaleLowerCase() === newTodo.text.toLocaleLowerCase())
     if (duplicated) {
       throw new Error('duplicated-update')
     }
@@ -42,14 +57,28 @@ export class TodoService {
     this.save()
   }
 
+  mark(text: string, done = true) {
+    const todo = this.find(text)
+    if (!todo) {
+      throw new Error('not-found')
+    }
+    this.update(todo, <Todo>{...todo, done})
+  }
+
   remove(selectedTodo: Todo) {
-    const listWithoutThisItem = this.__todos.filter(todo => todo.text !== selectedTodo.text)
+    const listWithoutThisItem = this.__todos
+      .filter(todo => todo.text !== selectedTodo.text)
     this.__todos = listWithoutThisItem
     this.save()
   }
 
   clear() {
     this.__todos = []
+    this.save()
+  }
+
+  clearDone() {
+    this.__todos = this.__todos.filter(todo => todo.done !== true)
     this.save()
   }
 }
