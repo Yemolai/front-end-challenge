@@ -1,6 +1,5 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { EventEmitter } from 'events';
 
 @Component({
   selector: 'app-todo-input',
@@ -13,7 +12,7 @@ export class TodoInputComponent implements OnInit {
 
   protected inputPlaceholder = 'Novo item'
 
-  @Output('submit') submitEvent = new EventEmitter();
+  @Output() submit = new EventEmitter<string>();
 
   protected text: string = ''
 
@@ -22,8 +21,9 @@ export class TodoInputComponent implements OnInit {
   ngOnInit() {
   }
 
-  submit() {
-    this.submitEvent.emit('submit');
+  emitSubmit() {
+    this.submit.emit(this.text);
+    this.text = ''
   }
 
 }
