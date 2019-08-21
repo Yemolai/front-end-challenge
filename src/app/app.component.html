@@ -4,6 +4,11 @@
     <h1 class="title">{{ title }}</h1>
   </div>
   <div class="todo">
-    <app-todo-list [list]="todoList"></app-todo-list>
+    <app-todo-list
+      (create)="newTodo($event)"
+      (update)="updateTodo($event)"
+      (remove)="removeTodo($event)"
+      [list]="list"
+    ></app-todo-list>
   </div>
 </div>
