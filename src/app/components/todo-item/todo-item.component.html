@@ -1,4 +1,17 @@
-<li>
-  <input type="checkbox" [value]="done">
-  <span>{{ text }}</span>
+<li class="item">
+  <div class="check-col">
+    <input
+    class="done-check"
+    type="checkbox"
+    [ngModel]="done"
+    (ngModelChange)="toggleDone">
+  </div>
+  <div class="content-col">
+    {{ text }}
+  </div>
+  <div class="action-col">
+    <button class="remove-btn" (click)="emitRemove">
+      &times;
+    </button>
+  </div>
 </li>
